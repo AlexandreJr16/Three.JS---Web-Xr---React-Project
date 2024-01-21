@@ -1,8 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { ARButton, XR } from "@react-three/xr";
-import XrHitCube from "./XrHitCube";
+import XrHitModel from "./XrHitModel";
 
-const XrCubeContainer = () => {
+const XrModelContainer = () => {
   return (
     <>
       <ARButton
@@ -13,11 +13,11 @@ const XrCubeContainer = () => {
 
       <Canvas>
         <XR>
-          <XrHitCube />
+          <XrHitModel />
         </XR>
       </Canvas>
     </>
   );
 };
 
-export default XrCubeContainer;
+export default XrModelContainer;

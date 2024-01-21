@@ -1,13 +1,14 @@
+/* eslint-disable react/no-unknown-property */
 import { OrbitControls } from "@react-three/drei";
 import { Interactive, useHitTest, useXR } from "@react-three/xr";
-import React, { useRef, useState } from "react";
-import { Mesh, RingGeometry } from "three";
-import Cube from "./Cube";
-import { useThree } from "@react-three/fiber";
+import { useRef, useState } from "react";
 
-const XrHitCube = () => {
-  const reticleRef = useRef<Mesh>({} as Mesh);
-  const [cubes, setCubes] = useState([]);
+import { useThree } from "@react-three/fiber";
+import { ModelXR } from "./Model";
+
+const XrHitModel = () => {
+  const reticleRef = useRef();
+  const [models, setModels] = useState([]);
   const { isPresenting } = useXR();
 
   useThree(({ camera }) => {
@@ -16,7 +17,7 @@ const XrHitCube = () => {
     }
   });
 
-  useHitTest((hitMatrix, hit) => {
+  useHitTest((hitMatrix) => {
     hitMatrix.decompose(
       reticleRef.current.position,
       reticleRef.current.quaternion,
@@ -25,21 +26,28 @@ const XrHitCube = () => {
     reticleRef.current.rotation.set(-Math.PI / 2, 0, 0);
   });
 
-  const placeCube = (e) => {
+  const placeModel = (e) => {
     let position = e.intersection.object.position.clone();
     let id = Date.now();
-    setCubes([...cubes, { position, id }]);
+    setModels([{ position, id }]);
   };
   return (
     <>
       <OrbitControls />
       <ambientLight />
       {isPresenting &&
-        cubes.map(({ position, id }) => {
-          return <Cube key={id} position={position} />;
+        models.map(({ position, id }) => {
+          return (
+            <ModelXR
+              key={id}
+              position={position}
+              modelLink={"/models/desk.gltf"}
+              scaleObj={1}
+            />
+          );
         })}
       {isPresenting && (
-        <Interactive onSelect={placeCube}>
+        <Interactive onSelect={placeModel}>
           <mesh ref={reticleRef} rotation-x={-Math.PI / 2}>
             <ringGeometry args={[0.1, 0.25, 32]} />
             <meshStandardMaterial color={"white"} />
@@ -47,9 +55,15 @@ const XrHitCube = () => {
         </Interactive>
       )}
 
-      {!isPresenting && <Cube position={undefined} />}
+      {!isPresenting && (
+        <ModelXR
+          position={undefined}
+          modelLink={"/models/desk.gltf"}
+          scaleObj={1}
+        />
+      )}
     </>
   );
 };
 
-export default XrHitCube;
+export default XrHitModel;
