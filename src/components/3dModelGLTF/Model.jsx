@@ -2,28 +2,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unknown-property */
 
-import React, { useRef } from "react";
+import React from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function ModelXR(props) {
   const { modelLink, scaleObj, position, ...otherProps } = props;
-  const { nodes, materials } = useGLTF(modelLink);
-
-  useGLTF.preload(modelLink);
+  const { nodes } = useGLTF(modelLink);
 
   return (
-    <group {...otherProps} dispose={null} scale={scaleObj} position={position}>
-      <group>
-        {Object.keys(nodes).map((nodeName, index) => (
-          <mesh
-            key={index}
-            castShadow
-            receiveShadow
-            geometry={nodes[nodeName].geometry}
-            material={materials[nodeName]}
-          />
-        ))}
-      </group>
+    <group {...otherProps} scale={scaleObj} position={position}>
+      {Object.values(nodes).map((node, index) => (
+        <mesh key={index} castShadow receiveShadow geometry={node.geometry}>
+          {node.material ? <meshStandardMaterial {...node.material} /> : null}
+        </mesh>
+      ))}
     </group>
   );
 }

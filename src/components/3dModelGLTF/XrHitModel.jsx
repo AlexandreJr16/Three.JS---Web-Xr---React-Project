@@ -41,7 +41,7 @@ const XrHitModel = () => {
             <ModelXR
               key={id}
               position={position}
-              modelLink={"/models/desk.gltf"}
+              modelLink={"/models/bench.gltf"}
               scaleObj={1}
             />
           );
@@ -58,7 +58,7 @@ const XrHitModel = () => {
       {!isPresenting && (
         <ModelXR
           position={undefined}
-          modelLink={"/models/desk.gltf"}
+          modelLink={"/models/bench.gltf"}
           scaleObj={1}
         />
       )}
