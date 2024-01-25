@@ -6,7 +6,7 @@ import XrModelContainer from "./components/3dModelGLTF/XrModelContainer";
 function App() {
   return (
     <Routes>
-      <Route path="/hit-model" element={<XrModelContainer />} />
+      <Route path="/" element={<XrModelContainer />} />
     </Routes>
   );
 }
